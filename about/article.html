@@ -4,258 +4,333 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>关于文章 · 时间给的答案</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ===== 全局重置与基础 ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: 'Noto Serif SC', serif;
-            background-color: #f5f2ed;
+            font-family: 'Noto Serif SC', 'Times New Roman', serif;
+            background-color: #f5f0eb;
             color: #1e1e1e;
-            display: flex;
-            min-height: 100vh;
+            line-height: 1.8;
         }
 
-        .navbar {
+        /* ===== 左侧导航栏（固定） ===== */
+        .sidebar {
             position: fixed;
-            left: 0;
             top: 0;
+            left: 0;
             width: 200px;
             height: 100vh;
-            background-color: #2c2c2c;
-            color: #e0dcd7;
+            background-color: #1a1a1a;
+            color: #ccc;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding: 40px 20px;
-            box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+            gap: 8px;
             z-index: 1000;
+            overflow-y: auto;
         }
-        .navbar a {
-            color: #c0b8b0;
-            text-decoration: none;
+
+        .sidebar .site-name {
             font-size: 18px;
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: color 0.2s, padding-left 0.2s;
-            letter-spacing: 1px;
-        }
-        .navbar a:last-child {
-            border-bottom: none;
-        }
-        .navbar a:hover {
-            color: #f0e8e0;
-            padding-left: 8px;
-        }
-        .navbar a.active {
-            color: #d4b68a;
             font-weight: 700;
-            padding-left: 12px;
-            border-left: 4px solid #d4b68a;
-        }
-
-        .main-wrapper {
-            margin-left: 200px;
-            flex: 1;
-            padding: 0 24px 40px;
-            max-width: 1000px;
-        }
-
-        .poster {
-            width: 100%;
-            height: auto;
-            margin: 0 auto 30px;
-            border-radius: 0 0 20px 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-        }
-        .poster img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .card {
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.07);
-            padding: 48px 40px;
+            color: #fff;
+            letter-spacing: 2px;
             margin-bottom: 30px;
-            animation: fadeIn 0.7s ease;
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(16px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .card h1 {
-            font-size: 28px;
-            text-align: center;
-            letter-spacing: 3px;
-            margin-bottom: 24px;
-            border-bottom: 2px solid #f0ece6;
+            border-bottom: 1px solid #333;
             padding-bottom: 16px;
         }
 
-        .content p {
-            text-indent: 2em;
-            line-height: 1.9;
-            margin-bottom: 18px;
-            font-size: 17px;
-        }
-        .content .en {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px dashed #ddd;
-        }
-        .content .en .label {
-            text-align: center;
-            font-size: 14px;
-            color: #aaa;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-        }
-        .content .en p {
-            text-indent: 0;
-            font-style: italic;
-            color: #555;
+        .sidebar a {
+            color: #bbb;
+            text-decoration: none;
             font-size: 16px;
-            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
         }
 
-        /* 视频超链接按钮 */
-        .video-link {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 12px 30px;
-            background-color: #d4b68a;
+        .sidebar a:hover {
+            background-color: #333;
             color: #fff;
-            border-radius: 40px;
-            text-decoration: none;
+        }
+
+        .sidebar a.active {
+            background-color: #c9a96e;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        /* ===== 主内容区 ===== */
+        .main {
+            margin-left: 200px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== 顶部海报（随滚动消失） ===== */
+        .hero {
+            width: 100%;
+            height: 50vh;
+            background: url('/assets/poster.jpg') center center / cover no-repeat;
+            background-color: #d9d0c5;
+            flex-shrink: 0;
+        }
+
+        /* ===== 卡片容器 ===== */
+        .card {
+            max-width: 820px;
+            margin: -60px auto 40px auto;
+            background: #ffffff;
+            padding: 50px 60px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            flex: 1;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== 文章内容样式 ===== */
+        .card h1 {
+            font-size: 28px;
             font-weight: 700;
-            font-size: 17px;
-            transition: background 0.2s, transform 0.1s;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .card .meta {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 28px;
+            border-bottom: 1px solid #f0ebe6;
+            padding-bottom: 20px;
+        }
+
+        .card p {
+            margin-bottom: 18px;
+            text-indent: 2em;
+            font-size: 16px;
+        }
+
+        .card .video-link {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 12px 30px;
+            background-color: #1a1a1a;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: background 0.25s, transform 0.15s;
             letter-spacing: 1px;
         }
-        .video-link:hover {
-            background-color: #c0a07a;
+
+        .card .video-link:hover {
+            background-color: #c9a96e;
+            color: #1a1a1a;
             transform: scale(1.02);
         }
 
-        .footer {
-            text-align: center;
-            font-size: 14px;
-            color: #bbb;
-            padding: 16px 0 8px;
+        .card .note {
+            margin-top: 30px;
+            padding-top: 20px;
             border-top: 1px solid #eee;
-            margin-top: 16px;
-            letter-spacing: 1px;
+            font-size: 14px;
+            color: #888;
+            text-indent: 0;
         }
 
+        /* ===== 底部版权 ===== */
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #bbb;
+            padding: 30px 20px 20px;
+            border-top: 1px solid #eee;
+            background: #fafafa;
+            margin-top: 20px;
+        }
+
+        /* ===== 响应式适配 ===== */
         @media (max-width: 768px) {
-            .navbar {
-                width: 100%;
-                height: 56px;
-                flex-direction: row;
-                justify-content: space-around;
-                align-items: center;
-                padding: 0 12px;
+            .sidebar {
+                position: fixed;
                 top: 0;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+                left: 0;
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 10px 16px;
+                gap: 4px;
+                background: #1a1a1a;
+                z-index: 1000;
+                align-items: center;
+                justify-content: flex-start;
             }
-            .navbar a {
-                padding: 8px 0;
-                font-size: 14px;
+
+            .sidebar .site-name {
+                font-size: 15px;
+                margin-bottom: 0;
+                padding-bottom: 0;
                 border-bottom: none;
-                border-left: none !important;
-                padding-left: 0 !important;
+                margin-right: 12px;
             }
-            .navbar a.active {
-                border-left: none;
-                border-bottom: 3px solid #d4b68a;
-                padding-left: 0;
+
+            .sidebar a {
+                font-size: 13px;
+                padding: 4px 10px;
             }
-            .main-wrapper {
+
+            .main {
                 margin-left: 0;
-                padding: 80px 12px 20px;
+                padding-top: 60px;
             }
+
+            .hero {
+                height: 30vh;
+            }
+
             .card {
-                padding: 24px 16px;
+                margin: -40px 12px 20px 12px;
+                padding: 28px 18px;
             }
+
             .card h1 {
                 font-size: 22px;
             }
-            .content p {
+
+            .card p {
                 font-size: 15px;
             }
-            .poster {
-                border-radius: 12px;
-                margin-bottom: 20px;
-            }
-            .video-link {
+
+            .card .video-link {
                 padding: 10px 20px;
-                font-size: 15px;
-            }
-        }
-        @media (max-width: 480px) {
-            .navbar a {
-                font-size: 12px;
-                padding: 6px 4px;
+                font-size: 14px;
+                display: block;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
+    <!-- ===== 侧边导航栏 ===== -->
+    <div class="sidebar">
+        <div class="site-name">⏳ 时间给的答案</div>
         <a href="/">首页</a>
         <a href="/about/article.html" class="active">关于文章</a>
         <a href="/about/author.html">关于作者</a>
         <a href="/about/gratitude.html">关于致谢</a>
         <a href="/about/future.html">关于未来</a>
-    </nav>
+    </div>
 
-    <div class="main-wrapper">
+    <!-- ===== 主内容 ===== -->
+    <div class="main">
+        <!-- 顶部海报 -->
+        <div class="hero"></div>
 
-        <div class="poster">
-            <img src="/assets/poster.jpg" alt="时间给的答案 海报">
-        </div>
-
+        <!-- 卡片 -->
         <div class="card">
             <h1>关于文章</h1>
-            <div class="content">
-                <p>这篇文章的源头很简单——想过六级。</p>
-                <p>起初只求及格，背了一个月六级单词，又随手做了一张模拟卷。没想到嘿，运气不错，居然将近550。那时我想，不如赌一把：认真准备两个月，就考这一次，一次考高了，以后就不用再刷分了。</p>
-                <p>考试那天，发挥得意外地顺利。听力是我从小到大最怕、最差的部分，也是六级里最难的板块。可当我对完答案——A篇和C篇全对，只错了B篇三条，几乎没怎么丢分！！阅读做完的时候挺有信心，可对完答案却平平无奇，多少有点遗憾。最后算下来，六级竟然600+。我想，这一次，我赌赢了！</p>
-                <p>某天夜里，刷到一条抖音：一个小女孩认真备考六级，但发挥失利受挫，最终却鼓起勇气，把这段经历全部发了出来。那一刻我决定，我也该写点什么，把这段路记下来，无论成功与否。人生不过是一场旅程，太在乎结果，就丢失了旅程本身的意义。可我要表达的太多，全部写下来，文章想必很长，要是发在朋友圈里，大概没人有耐心看完。</p>
-                <p>后来我想到，前不久，我幼儿园时的朋友，现就读于清华大学，他在微信朋友圈，分享了个网址，是自己做的论坛网站，记录了他这几年的恋爱经历。我心想，这个主意不错。</p>
-                <p>想法有了，载体也有了。那内容呢？都是自己走过的路，写出来当是信手拈来。</p>
-                <p>内容有了，取什么标题好呢？我想了很久......作为AG粉丝的我，回想起，记录了2023年春，AG最低谷时经历的一部纪录片——《时间给的答案》。三年后的现在，再回来考古——那支曾被漫天谩骂与质疑的队伍，如今已是荣誉满身。时间给的答案，常看常新——这正是我所想表达的。于是便有了你们所见的这条朋友圈：时间给的答案⏰，附一个链接。</p>
-                <p>文案太长，关系不够的人未必愿意看完。但我把网址丢出来，愿意点进来、耐着性子看完的，是真正愿意了解我的人。这也是我的一种筛选。而网站，正是随我畅所欲言的地方......</p>
-                <p>文章怎么来的说完了，再说说定稿吧。没记错的话，《时间给的答案》是在大一下，期末考试前几天定稿的。期间反复修改了很多遍，才有了最终的样子。本想借这篇文章，完全表达自己的想法，但后来发现，每过一个阶段，所经历的事多了，心境变了，想说的话也不同了。时隔两个月，它虽已不再能装下，我当下的心境。但我知道，在那个阶段，它一定最能代表我的心声。所以，我决定不改它，就发当时的模样。至于，为什么加了英文翻译——我觉得很多时候，英文表达得更加唯美。</p>
+            <div class="meta">文 / 吴横 ｜ 发布于 2026.08.02</div>
 
-                <p style="margin-top: 24px; font-weight: 500;">备注：<a href="/assets/documentary.mp4" target="_blank" class="video-link">🎬 时间给的答案纪录片（点击观看）</a></p>
+            <p>这篇文章的源头很简单——想过六级。</p>
+            <p>起初只求及格，背了一个月六级单词，又随手做了一张模拟卷。</p>
+            <p>没想到嘿，运气不错，居然将近550。</p>
+            <p>那时我想，不如赌一把：认真准备两个月，就考这一次，一次考高了，以后就不用再刷分了。</p>
+            <p>考试那天，发挥得意外地顺利。</p>
+            <p>听力是我从小到大最怕、最差的部分，也是六级里最难的板块。可当我对完答案——A篇和C篇全对，只错了B篇三条，几乎没怎么丢分！！</p>
+            <p>阅读做完的时候挺有信心，可对完答案却平平无奇，多少有点遗憾。</p>
+            <p>最后算下来，六级竟然600+。</p>
+            <p>我想，这一次，我赌赢了！</p>
+            <p>某天夜里，刷到一条抖音：一个小女孩认真备考六级，但发挥失利受挫，最终却鼓起勇气，把这段经历全部发了出来。</p>
+            <p>那一刻我决定，我也该写点什么，把这段路记下来，无论成功与否。</p>
+            <p>人生不过是一场旅程，太在乎结果，就丢失了旅程本身的意义。</p>
+            <p>可我要表达的太多，全部写下来，文章想必很长，要是发在朋友圈里，大概没人有耐心看完。</p>
+            <p>后来我想到，前不久，我幼儿园时的朋友，现就读于清华大学，他在微信朋友圈，分享了个网址，是自己做的论坛网站，记录了他这几年的恋爱经历。</p>
+            <p>我心想，这个主意不错。</p>
+            <p>想法有了，载体也有了。那内容呢？</p>
+            <p>都是自己走过的路，写出来当是信手拈来。</p>
+            <p>内容有了，取什么标题好呢？</p>
+            <p>我想了很久......</p>
+            <p>作为AG粉丝的我，回想起，记录了2023年春，AG最低谷时经历的一部纪录片——《时间给的答案》。</p>
+            <p>三年后的现在，再回来考古——那支曾被漫天谩骂与质疑的队伍，如今已是荣誉满身。</p>
+            <p>时间给的答案，常看常新——这正是我所想表达的。</p>
+            <p>于是便有了你们所见的这条朋友圈：</p>
+            <p>时间给的答案⏰，附一个链接。</p>
+            <p>文案太长，关系不够的人未必愿意看完。</p>
+            <p>但我把网址丢出来，愿意点进来、耐着性子看完的，是真正愿意了解我的人。这也是我的一种筛选。</p>
+            <p>而网站，正是随我畅所欲言的地方......</p>
+            <p>文章怎么来的说完了，再说说定稿吧。</p>
+            <p>没记错的话，《时间给的答案》是在大一下，期末考试前几天定稿的。期间反复修改了很多遍，才有了最终的样子。</p>
+            <p>本想借这篇文章，完全表达自己的想法，但后来发现，每过一个阶段，所经历的事多了，心境变了，想说的话也不同了。</p>
+            <p>时隔两个月，它虽已不再能装下，我当下的心境。但我知道，在那个阶段，它一定最能代表我的心声。</p>
+            <p>所以，我决定不改它，就发当时的模样。</p>
+            <p>至于，为什么加了英文翻译——我觉得很多时候，英文表达得更加唯美。</p>
 
-                <div class="en">
-                    <div class="label">— Translated by English —</div>
-                    <p><strong>About The Article</strong></p>
-                    <p>The origin of this article is simple —— I wanted to pass CET-6.</p>
-                    <p>At first, my goal was just to get a passing score. I spent a month memorizing vocabulary, and casually tried a practice test. Well, to my surprise, I scored nearly 550. At that moment, I thought: why not go all in? Two months of serious preparation, one shot. Score high enough this time, and I'd never have to take it again.</p>
-                    <p>On exam day, things went unexpectedly well. Listening has always been my weakest link, the section I feared most — and the hardest part of CET-6. But when I checked the answers — all correct in Parts A and C, only three wrong in Part B — I barely lost any points at all!! Reading felt confident after I finished, yet the answers turned out just average, which was somewhat disappointing. In the end, it added up to over 600. I thought to myself: I won this bet.</p>
-                    <p>One night, I came across a Douyin video — a young girl who had prepared diligently for CET-6, stumbled on exam day, yet mustered the courage to share her entire experience. That moved me. I decided I should write something too, to record this journey, regardless of success or failure. Life, after all, is but a journey — focus too much on the destination, and you lose the meaning of the path itself.</p>
-                    <p>But I had too much to say. Writing it all down would make it long — too long for a WeChat Moment, where few would have the patience to read through. Then I remembered: not long ago, a friend from kindergarten, now at Tsinghua, shared a URL in his Moments — a forum website he built himself, chronicling his love stories over the years. I thought, that's a great idea.</p>
-                    <p>The idea was there. The platform was there. What about the content? It was all my own experience — writing it out would be second nature.</p>
-                    <p>Content settled. But what title should I choose? I pondered for a long time... As an AG fan, I recalled a documentary from the spring of 2023, capturing the team at their lowest point — The Answer Given by Time. Now, three years later, looking back — the team once buried in criticism and doubt now stands covered in glory. What time answers reveals new meanings with each passing glance — that's exactly what I wanted to express. And so came the WeChat Moment you saw: "The Answer Given by Time ⏰" with a link attached.</p>
-                    <p>A long post; those not close enough might not bother to read it all. But by putting the link out there, those who click in and read through with patience —— they are the ones who truly want to know me. This is my kind of filter. And the website gives me a space to speak freely, without restraint.</p>
-                    <p>That's the story of how this article came to be. Now, about its final version. If I remember correctly, The Answer Given by Time was finalized just days before my final exams in the second semester of freshman year. I revised it over and over again until it took its final shape. I had hoped this article would fully capture my thoughts. But I've since come to realize — with each passing phase, with more experiences under my belt, my state of mind shifts, and the things I want to say change too. Two months have passed now, and it no longer holds everything I feel today. But I know — at that moment, it was the truest voice I had. So I decided not to change it. I'll leave it as it was then. As for why I added an English translation — I feel that some things just sound more beautiful in English.</p>
-                </div>
+            <!-- 视频超链接 -->
+            <p style="margin-top: 30px; text-indent: 0;">
+                <a href="https://www.bilibili.com/video/BV1Xh4y1P7sL/" target="_blank" class="video-link">🎬 点击观看《时间给的答案》纪录片</a>
+            </p>
+
+            <p class="note">备注：目前此站为纯前端，未来考虑加入后端技术栈。</p>
+
+            <!-- 英文翻译 -->
+            <div style="margin-top: 40px; padding-top: 30px; border-top: 2px dashed #e0d6cc; color: #555; font-size: 15px;">
+                <p style="font-weight: 600; text-indent: 0; color: #1a1a1a;">— Translated by English —</p>
+                <p><strong>About The Article</strong></p>
+                <p>The origin of this article is simple —— I wanted to pass CET-6.</p>
+                <p>At first, my goal was just to get a passing score. I spent a month memorizing vocabulary, and casually tried a practice test.</p>
+                <p>Well, to my surprise, I scored nearly 550.</p>
+                <p>At that moment, I thought: why not go all in? Two months of serious preparation, one shot. Score high enough this time, and I'd never have to take it again.</p>
+                <p>On exam day, things went unexpectedly well.</p>
+                <p>Listening has always been my weakest link, the section I feared most — and the hardest part of CET-6. But when I checked the answers — all correct in Parts A and C, only three wrong in Part B — I barely lost any points at all!!</p>
+                <p>Reading felt confident after I finished, yet the answers turned out just average, which was somewhat disappointing.</p>
+                <p>In the end, it added up to over 600.</p>
+                <p>I thought to myself: I won this bet.</p>
+                <p>One night, I came across a Douyin video — a young girl who had prepared diligently for CET-6, stumbled on exam day, yet mustered the courage to share her entire experience.</p>
+                <p>That moved me. I decided I should write something too, to record this journey, regardless of success or failure.</p>
+                <p>Life, after all, is but a journey — focus too much on the destination, and you lose the meaning of the path itself.</p>
+                <p>But I had too much to say. Writing it all down would make it long — too long for a WeChat Moment, where few would have the patience to read through.</p>
+                <p>Then I remembered: not long ago, a friend from kindergarten, now at Tsinghua, shared a URL in his Moments — a forum website he built himself, chronicling his love stories over the years.</p>
+                <p>I thought, that's a great idea.</p>
+                <p>The idea was there. The platform was there. What about the content?</p>
+                <p>It was all my own experience — writing it out would be second nature.</p>
+                <p>Content settled. But what title should I choose? I pondered for a long time...</p>
+                <p>As an AG fan, I recalled a documentary from the spring of 2023, capturing the team at their lowest point — The Answer Given by Time.</p>
+                <p>Now, three years later, looking back — the team once buried in criticism and doubt now stands covered in glory.</p>
+                <p>What time answers reveals new meanings with each passing glance — that's exactly what I wanted to express.</p>
+                <p>And so came the WeChat Moment you saw:</p>
+                <p>"The Answer Given by Time ⏰" with a link attached.</p>
+                <p>A long post; those not close enough might not bother to read it all.</p>
+                <p>But by putting the link out there, those who click in and read through with patience —— they are the ones who truly want to know me. This is my kind of filter.</p>
+                <p>And the website gives me a space to speak freely, without restraint.</p>
+                <p>That's the story of how this article came to be. Now, about its final version.</p>
+                <p>If I remember correctly, The Answer Given by Time was finalized just days before my final exams in the second semester of freshman year. I revised it over and over again until it took its final shape.</p>
+                <p>I had hoped this article would fully capture my thoughts. But I've since come to realize — with each passing phase, with more experiences under my belt, my state of mind shifts, and the things I want to say change too.</p>
+                <p>Two months have passed now, and it no longer holds everything I feel today. But I know — at that moment, it was the truest voice I had.</p>
+                <p>So I decided not to change it. I'll leave it as it was then.</p>
+                <p>As for why I added an English translation — I feel that some things just sound more beautiful in English.</p>
             </div>
-            <div class="footer">© 2026 吴横 · 时间给的答案</div>
         </div>
 
+        <!-- 底部版权 -->
+        <div class="footer">
+            © 2026 吴横 · 时间给的答案
+        </div>
     </div>
 
 </body>
