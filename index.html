@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间给的答案 · 首页</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 全局重置 & 字体 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background-color: #f5f2ed;
+            color: #1e1e1e;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ===== 左侧导航栏（固定） ===== */
+        .navbar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 200px;
+            height: 100vh;
+            background-color: #2c2c2c;
+            color: #e0dcd7;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px 20px;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .navbar a {
+            color: #c0b8b0;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: color 0.2s, padding-left 0.2s;
+            letter-spacing: 1px;
+        }
+        .navbar a:last-child {
+            border-bottom: none;
+        }
+        .navbar a:hover {
+            color: #f0e8e0;
+            padding-left: 8px;
+        }
+        .navbar a.active {
+            color: #d4b68a;
+            font-weight: 700;
+            padding-left: 12px;
+            border-left: 4px solid #d4b68a;
+        }
+
+        /* ===== 主内容区（右侧） ===== */
+        .main-wrapper {
+            margin-left: 200px;
+            flex: 1;
+            padding: 0 24px 40px;
+            max-width: 1000px;
+        }
+
+        /* ===== 顶部海报（随滚动消失） ===== */
+        .poster {
+            width: 100%;
+            height: auto;
+            margin: 0 auto 30px;
+            border-radius: 0 0 20px 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .poster img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ===== 卡片内容 ===== */
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+            padding: 48px 40px;
+            margin-bottom: 30px;
+            animation: fadeIn 0.7s ease;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(16px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 文章标题 & 元数据 */
+        .article-title {
+            text-align: center;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+        .meta {
+            text-align: center;
+            font-size: 15px;
+            color: #999;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .meta span {
+            margin: 0 6px;
+        }
+
+        /* 正文段落 */
+        .content p {
+            text-indent: 2em;
+            line-height: 1.9;
+            margin-bottom: 18px;
+            font-size: 17px;
+        }
+        .content .en p {
+            text-indent: 0;
+            font-style: italic;
+            color: #555;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        .content .en {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #ddd;
+        }
+        .content .en .label {
+            text-align: center;
+            font-size: 14px;
+            color: #aaa;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        /* 章节分割线 */
+        .divider {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #d4b68a, transparent);
+            margin: 36px 0 30px;
+        }
+
+        /* 底部版权 */
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #bbb;
+            padding: 16px 0 8px;
+            border-top: 1px solid #eee;
+            margin-top: 16px;
+            letter-spacing: 1px;
+        }
+
+        /* ===== 欢迎弹窗 ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(3px);
+            animation: fadeIn 0.5s ease;
+        }
+        .modal-box {
+            background: #fff;
+            max-width: 420px;
+            width: 90%;
+            padding: 40px 32px 32px;
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            text-align: center;
+            animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp {
+            0% { transform: scale(0.9) translateY(30px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .modal-box h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c2c2c;
+            margin-bottom: 12px;
+        }
+        .modal-box p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+        .modal-box .btn-close {
+            background: #d4b68a;
+            color: #fff;
+            border: none;
+            padding: 10px 36px;
+            border-radius: 40px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+        .modal-box .btn-close:hover {
+            background: #c0a07a;
+        }
+
+        /* ===== 响应式：手机端 ===== */
+        @media (max-width: 768px) {
+            .navbar {
+                width: 100%;
+                height: 56px;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                padding: 0 12px;
+                top: 0;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+            }
+            .navbar a {
+                padding: 8px 0;
+                font-size: 14px;
+                border-bottom: none;
+                border-left: none !important;
+                padding-left: 0 !important;
+            }
+            .navbar a.active {
+                border-left: none;
+                border-bottom: 3px solid #d4b68a;
+                padding-left: 0;
+            }
+            .main-wrapper {
+                margin-left: 0;
+                padding: 80px 12px 20px;
+            }
+            .card {
+                padding: 24px 16px;
+            }
+            .article-title {
+                font-size: 24px;
+            }
+            .content p {
+                font-size: 15px;
+            }
+            .poster {
+                border-radius: 12px;
+                margin-bottom: 20px;
+            }
+            .modal-box {
+                padding: 32px 20px 24px;
+            }
+        }
+        @media (max-width: 480px) {
+            .navbar a {
+                font-size: 12px;
+                padding: 6px 4px;
+            }
+            .article-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 左侧导航栏 -->
+    <nav class="navbar">
+        <a href="/" class="active">首页</a>
+        <a href="/about/article.html">关于文章</a>
+        <a href="/about/author.html">关于作者</a>
+        <a href="/about/gratitude.html">关于致谢</a>
+        <a href="/about/future.html">关于未来</a>
+    </nav>
+
+    <!-- 主内容 -->
+    <div class="main-wrapper">
+
+        <!-- 顶部海报 -->
+        <div class="poster">
+            <img src="/assets/poster.jpg" alt="时间给的答案 海报">
+        </div>
+
+        <!-- 卡片：首页文章 -->
+        <div class="card">
+            <h1 class="article-title">时间给的答案</h1>
+            <div class="meta">文 / 吴横 ｜ 发布于 2026.08.02</div>
+
+            <div class="content">
+                <p>普通双非一本六级600+，六级备考路亦是人生之路。</p>
+                <p>2026年6月29日，我特地重温了一遍KPL的传世神作——AG纪录片《时间给的答案》。</p>
+                <p>2026年6月30日，偶然刷到了一条抖音，一个关于小女孩六级备考失败受挫却鼓起勇气发出来的纪录片。</p>
+                <p>我想，和小女孩六级备考一样，无论成功还是失败。我熬过的这一年的"人生路"和两个月的"六级备考路"同样不该被埋没！</p>
+                <p>我想，和AG这条纪录片一样，时间会给出我"人生路"和"六级备考路"上的答案！</p>
+                <p>2026年7月1日，我回想起过去和这一年的人生经历，在路上走着走着就哭了。</p>
+                <p>时间过的真快啊，转眼间，我流放在外省上大学，已经快一年了。</p>
+                <p>摸爬滚打着，那个从小到大靠家人和朋友照顾的小屁孩，他自己一个人，走过来了。</p>
+                <p>我想，人生必须有一段经历，是自己走过去的，它充满了痛苦，充满了孤独。但那便是成长——</p>
+                <p>他长大懂事了，找到自我了。</p>
+                <p>他长大懂事了——开始独当一面了起来。做到了，在生活上——不求他人，只靠自己。</p>
+                <p>"靠自己的时候，你就会知道，有谁、没谁、多谁、少谁，真的一点都不重要"。</p>
+                <p>他找到自我了——活得清醒，活得透彻。无需他人理解，不与他人争辩。</p>
+                <p>"你所见即是我，好与坏我都不反驳"。</p>
+                <p>或许，时间给了我人生路上的答案！</p>
+
+                <hr class="divider">
+
+                <p>感我此言良久立，再谈谈我的六级备考之路吧！</p>
+                <p>两个月的六级备考。</p>
+                <p>日复一日的六级单词背诵，为期近一个月的刷真题套卷并订正，还有一次次的听力模拟。学习很苦，但坚持很酷。</p>
+                <p>这两个月内，我几乎切断了所有人际交往，主动选择了独处。在独处中沉淀自己，在学习中充实自己。</p>
+                <p>"内心充盈者，独行也如众"。</p>
+                <p>或许，时间给了我六级路上的答案！</p>
+                <p>2026年6月13日，六级考场上的我既紧张又从容，但却发挥得异常顺利。</p>
+                <p>两个月的出分等待。</p>
+                <p>2026年8月15日，六级查分——高考失利、普通双非一本的我，很幸运，大一下第一次六级600+。</p>
+                <p>或是运气，又或是努力，亦或是实力——这次六级，最难且我最薄弱的听力，竟然A篇和C篇全对，只错了B篇三条！写译成绩超我所愿。而简单点的阅读却答得中规中矩。</p>
+                <p>六级600+的成功，来之不易。但我知道，这就是我应得的。</p>
+                <p>我太需要这次成功来证明——</p>
+                <p>给自己看——你一直很优秀！那年那次，你只是输给了自己，而不是输了人生。你的人生答卷，乱答也是满分。</p>
+                <p>给别人看——在这里，我就是有"心高气傲"的实力和底气。</p>
+                <p>少年心气是不可再生之物——我不安于现状，更不甘于平庸。</p>
+                <p>这次六级，只是我人生路上的起点。</p>
+                <p>因为，再等等，时间给的答案，常看常新……</p>
+
+                <!-- 英文翻译 -->
+                <div class="en">
+                    <div class="label">— Translated by English —</div>
+                    <p><strong>What Time Answers</strong></p>
+                    <p>A mere undergraduate from an ordinary university, yet CET-6 score above 600. The road to CET-6 is also the road of my life.</p>
+                    <p>On June 29, 2026, I revisited a legendary KPL documentary — AG's What Time Answers.</p>
+                    <p>On June 30, 2026, I stumbled upon a video of a young girl bravely sharing her failure in the CET-6 exam.</p>
+                    <p>I thought to myself: like that girl, whether in success or failure, the year I've endured and the two months I've devoted to this exam should not go unnoticed.</p>
+                    <p>And like AG's documentary, time will eventually give me its answer — on both roads.</p>
+                    <p>On July 1, 2026, as I walked down the street, looking back on the past year, I broke down in tears.</p>
+                    <p>How time flies. In the blink of an eye, I've been away from home, studying in another province, for nearly a year.</p>
+                    <p>Stumbling and crawling, that little kid who had always relied on family and friends — he made it through. Alone.</p>
+                    <p>I suppose there must be a stretch of life that one walks entirely by oneself — filled with pain, filled with solitude. But that — that is growth.</p>
+                    <p>He has grown up, come to understand, and found himself.</p>
+                    <p>He has learned to stand on his own — in life, relying on no one but himself.</p>
+                    <p>"When you rely on yourself, you come to realize that who's there, who's not, who's more, who's less — none of it truly matters."</p>
+                    <p>He lives with clarity, with transparency — seeking no one's understanding, arguing with no one.</p>
+                    <p>"What you see is what I am — I won't refute either the good or the bad."</p>
+                    <p>Perhaps time has already given me its answer on the road of life.</p>
+                    <p>With these words lingering in my heart, let me turn back to my CET-6 journey.</p>
+                    <p>Two months of preparation — daily vocabulary drills, nearly a month of past papers and corrections, and countless listening exercises. The grind was tough, but persistence is a kind of beauty.</p>
+                    <p>During those two months, I cut off almost all social contact, choosing solitude by will. In solitude, I found my center; in study, I found my fullness.</p>
+                    <p>"A heart full of abundance walks as boldly alone as in a crowd."</p>
+                    <p>Perhaps time has given me its answer on the road to CET-6 as well.</p>
+                    <p>On June 13, 2026, I sat for the exam — nervous yet composed, and it went far smoother than I had dared to hope.</p>
+                    <p>Then came the two-month wait.</p>
+                    <p>On August 15, 2026, the results were out — and I, a student from an ordinary university, having stumbled in the college entrance exam, scored over 600 on my very first attempt in the second semester of freshman year.</p>
+                    <p>Perhaps it was luck, or hard work, or simply capability — but in this exam, my weakest and most feared section, listening, saw me get all correct in Parts A and C, missing only three in Part B; my writing and translation exceeded expectations, while the reading section, supposedly the easier part, was merely average.</p>
+                    <p>The success was hard-earned, but I know — I deserved it.</p>
+                    <p>I needed this triumph to prove — to myself: I have always been capable. That failure back then was a loss to myself, not to life. Even a scribbled answer sheet to life's questions can still be perfect. To others: Here, I carry the confidence and the strength to hold my head high.</p>
+                    <p>The spirit of youth is a non-renewable resource — I am not content with where I am, nor resigned to mediocrity.</p>
+                    <p>This CET-6 victory is but a starting point on my life's journey.</p>
+                    <p>Because — wait a little longer. The answer given by time reveals new meanings with each passing glance…</p>
+                </div>
+            </div>
+
+            <div class="footer">© 2026 吴横 · 时间给的答案</div>
+        </div>
+
+    </div>
+
+    <!-- 欢迎弹窗（每次进入首页弹出） -->
+    <div class="modal-overlay" id="welcomeModal">
+        <div class="modal-box">
+            <h2>🕊️ 欢迎光临</h2>
+            <p>时间会给你答案。<br>—— 吴横</p>
+            <button class="btn-close" id="closeModal">我知道了</button>
+        </div>
+    </div>
+
+    <script>
+        // 关闭弹窗（点击按钮或点击遮罩）
+        const modal = document.getElementById('welcomeModal');
+        const closeBtn = document.getElementById('closeModal');
+        const closeModal = () => { modal.style.display = 'none'; };
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    </script>
+
+</body>
+</html>
