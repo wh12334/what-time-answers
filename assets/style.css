@@ -303,6 +303,36 @@ button:focus-visible {
   letter-spacing: 1px;
 }
 
+/* 英文译文大标题 */
+.content .en .en-title {
+  position: relative;
+  text-align: center;
+  font-style: normal;
+  font-size: clamp(20px, 2.6vw, 24px);
+  letter-spacing: 2px;
+  color: var(--ink);
+  margin: 6px auto 24px;
+  padding-bottom: 14px;
+  text-indent: 0;
+}
+
+.content .en .en-title strong {
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.content .en .en-title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
 .divider {
   border: 0;
   height: 1px;
