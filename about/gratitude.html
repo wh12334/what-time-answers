@@ -4,186 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>关于致谢 · 时间给的答案</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Noto Serif SC', serif;
-            background-color: #f5f2ed;
-            color: #1e1e1e;
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .navbar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 200px;
-            height: 100vh;
-            background-color: #2c2c2c;
-            color: #e0dcd7;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 40px 20px;
-            box-shadow: 2px 0 12px rgba(0,0,0,0.15);
-            z-index: 1000;
-        }
-        .navbar a {
-            color: #c0b8b0;
-            text-decoration: none;
-            font-size: 18px;
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: color 0.2s, padding-left 0.2s;
-            letter-spacing: 1px;
-        }
-        .navbar a:last-child {
-            border-bottom: none;
-        }
-        .navbar a:hover {
-            color: #f0e8e0;
-            padding-left: 8px;
-        }
-        .navbar a.active {
-            color: #d4b68a;
-            font-weight: 700;
-            padding-left: 12px;
-            border-left: 4px solid #d4b68a;
-        }
-
-        .main-wrapper {
-            margin-left: 200px;
-            flex: 1;
-            padding: 0 24px 40px;
-            max-width: 1000px;
-        }
-
-        .poster {
-            width: 100%;
-            height: auto;
-            margin: 0 auto 30px;
-            border-radius: 0 0 20px 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-        }
-        .poster img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .card {
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.07);
-            padding: 48px 40px;
-            margin-bottom: 30px;
-            animation: fadeIn 0.7s ease;
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(16px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .card h1 {
-            font-size: 28px;
-            text-align: center;
-            letter-spacing: 3px;
-            margin-bottom: 24px;
-            border-bottom: 2px solid #f0ece6;
-            padding-bottom: 16px;
-        }
-
-        .content p {
-            text-indent: 2em;
-            line-height: 1.9;
-            margin-bottom: 18px;
-            font-size: 17px;
-        }
-        .content .en {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px dashed #ddd;
-        }
-        .content .en .label {
-            text-align: center;
-            font-size: 14px;
-            color: #aaa;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-        }
-        .content .en p {
-            text-indent: 0;
-            font-style: italic;
-            color: #555;
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 14px;
-            color: #bbb;
-            padding: 16px 0 8px;
-            border-top: 1px solid #eee;
-            margin-top: 16px;
-            letter-spacing: 1px;
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                width: 100%;
-                height: 56px;
-                flex-direction: row;
-                justify-content: space-around;
-                align-items: center;
-                padding: 0 12px;
-                top: 0;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-            }
-            .navbar a {
-                padding: 8px 0;
-                font-size: 14px;
-                border-bottom: none;
-                border-left: none !important;
-                padding-left: 0 !important;
-            }
-            .navbar a.active {
-                border-left: none;
-                border-bottom: 3px solid #d4b68a;
-                padding-left: 0;
-            }
-            .main-wrapper {
-                margin-left: 0;
-                padding: 80px 12px 20px;
-            }
-            .card {
-                padding: 24px 16px;
-            }
-            .card h1 {
-                font-size: 22px;
-            }
-            .content p {
-                font-size: 15px;
-            }
-            .poster {
-                border-radius: 12px;
-                margin-bottom: 20px;
-            }
-        }
-        @media (max-width: 480px) {
-            .navbar a {
-                font-size: 12px;
-                padding: 6px 4px;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/style.css">
+    
 </head>
 <body>
 
@@ -209,7 +32,7 @@
                 <p><strong>感谢专业</strong>——感谢计算机这门学科。我想我是真的热爱它：数学思维敏捷，逻辑条理清晰；英语颇有天赋，单词记忆几乎过目不忘，再加上终身学习的能力。这些都让我在这条路上如鱼得水。</p>
                 <p><strong>感谢经历</strong>——感谢过去和这一年的经历。顺境给我快乐，逆境赠我成长；被人上了一课，那是对方的本事，若我自己走不出来，那便是我的无能。凡是打不倒我的，终将使我更加强大。</p>
                 <p><strong>感谢AI</strong>——最后，我要特别感谢小鲸鱼 DeepSeek（当然不光有你） 的技术陪伴。小鲨鱼 WH由衷感谢一路有你😭</p>
-                <p style="margin-top: 12px; text-align: right; font-weight: 300;">遇见你们，是我的幸运。</p>
+                <p class="sign-off">遇见你们，是我的幸运。</p>
 
                 <div class="en">
                     <div class="label">— Translated by English —</div>
@@ -219,7 +42,7 @@
                     <p><strong>To my major</strong> — thank you to computer science itself. I believe I truly love it: quick mathematical thinking, clear logic, a natural gift for English that makes vocabulary stick almost at a glance, and a lifelong capacity for learning. All of this makes me feel right at home on this path.</p>
                     <p><strong>To my experiences</strong> — thank you to the past year and all that came with it. Smooth days gave me joy; rough ones gave me growth. If someone schools me, that's their skill; if I cannot rise from it, that is my own failure. What doesn't kill me will only make me stronger.</p>
                     <p><strong>To AI</strong> — finally, a special thanks to Little Whale DeepSeek (and certainly not just you) for your company along the way. Little Shark WH is truly grateful to have you by my side all this time 😭</p>
-                    <p style="margin-top: 12px; text-align: right; font-style: italic; color: #777;">Meeting you all has been my fortune.</p>
+                    <p class="sign-off">Meeting you all has been my fortune.</p>
                 </div>
             </div>
             <div class="footer">© 2026 吴横 · 时间给的答案</div>
