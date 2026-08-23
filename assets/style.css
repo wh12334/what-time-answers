@@ -472,31 +472,33 @@ button:focus-visible {
   border-top: 1px solid var(--line);
 }
 
-/* ===== 欢迎弹窗 ===== */
+/* ===== 欢迎弹窗（动态渲染） ===== */
 .modal-overlay {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(38, 30, 20, 0.45);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(38, 30, 20, 0.48);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 2000;
+  padding: 20px;
   animation: fadeIn 0.4s ease;
 }
 
 .modal-box {
   position: relative;
   width: 90%;
-  max-width: 430px;
-  padding: 44px 36px 34px;
-  background: var(--surface);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 26px;
-  box-shadow: 0 30px 80px rgba(38, 30, 20, 0.35);
+  max-width: 440px;
+  padding: 50px 36px 38px;
+  background: linear-gradient(180deg, #fffdf8, #fbf6ee);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 28px;
+  box-shadow: 0 34px 90px rgba(38, 30, 20, 0.38);
   text-align: center;
-  animation: slideUp 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.15);
+  overflow: hidden;
+  animation: slideUp 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.12);
 }
 
 .modal-box::before {
@@ -505,43 +507,218 @@ button:focus-visible {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 70px;
+  width: 76px;
   height: 4px;
   border-radius: 0 0 4px 4px;
   background: linear-gradient(90deg, transparent, var(--accent), transparent);
 }
 
-.modal-box h2 {
-  font-size: 24px;
-  letter-spacing: 3px;
-  margin-bottom: 14px;
-  color: var(--ink);
+/* 顶部暖金光晕 */
+.modal-glow {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  width: 340px;
+  height: 280px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(176, 138, 86, 0.32), transparent 72%);
+  filter: blur(6px);
+  pointer-events: none;
+  animation: glowPulse 5s ease-in-out infinite;
 }
 
-.modal-box p {
+/* 上升金色粒子 */
+.modal-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.modal-particles span {
+  position: absolute;
+  bottom: -12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d6b786, var(--accent));
+  opacity: 0;
+  animation: rise linear infinite;
+}
+
+/* 飞舞的白鸽 */
+.modal-dove {
+  display: inline-block;
+  font-size: 52px;
+  line-height: 1;
+  margin-bottom: 8px;
+  animation: doveFloat 3.6s ease-in-out infinite;
+  filter: drop-shadow(0 8px 14px rgba(176, 138, 86, 0.35));
+}
+
+/* 动态问候语 + 实时时钟 */
+.modal-greeting {
   font-size: 15px;
-  color: var(--ink-soft);
-  line-height: 1.9;
-  margin-bottom: 26px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  color: var(--accent-strong);
+  margin-bottom: 5px;
+  animation: fadeIn 0.6s ease 0.15s both;
 }
 
+.modal-clock {
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 18px;
+  animation: fadeIn 0.6s ease 0.3s both;
+}
+
+/* 主题标题（打字机） */
+.modal-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 7px;
+  color: var(--ink);
+  min-height: 42px;
+  margin-bottom: 6px;
+}
+
+.modal-title::after {
+  content: "|";
+  display: inline-block;
+  margin-left: 3px;
+  color: var(--accent);
+  font-weight: 400;
+  animation: blink 0.9s step-end infinite;
+}
+
+.modal-title.typed-done::after {
+  animation: none;
+  opacity: 0;
+}
+
+/* 分隔装饰 */
+.modal-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 78%;
+  margin: 16px auto;
+}
+
+.modal-divider::before,
+.modal-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
+}
+
+.modal-divider span {
+  color: var(--accent);
+  font-size: 12px;
+}
+
+/* 引言与落款 */
+.modal-quote {
+  font-size: 17px;
+  letter-spacing: 1px;
+  color: var(--ink);
+  line-height: 1.9;
+  margin-bottom: 6px;
+  opacity: 0;
+  animation: fadeIn 0.6s ease 1.0s both;
+}
+
+.modal-sign {
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: var(--ink-soft);
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeIn 0.6s ease 1.2s both;
+}
+
+.modal-author {
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+/* 关键词标签 */
+.modal-tags {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  opacity: 0;
+  animation: fadeIn 0.6s ease 1.4s both;
+}
+
+.modal-tag {
+  padding: 5px 16px;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--accent-strong);
+  background: var(--accent-pale);
+  border: 1px solid var(--accent-soft);
+  border-radius: 999px;
+}
+
+/* 关闭按钮（磁吸光斑） */
 .btn-close {
-  padding: 12px 40px;
+  position: relative;
+  overflow: hidden;
+  padding: 13px 44px;
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
   color: #fff;
   border: none;
   border-radius: 999px;
   font-family: inherit;
   font-size: 15px;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   cursor: pointer;
-  box-shadow: 0 10px 24px rgba(176, 138, 86, 0.35);
+  box-shadow: 0 12px 28px rgba(176, 138, 86, 0.38);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  opacity: 0;
+  animation: fadeIn 0.6s ease 1.6s both;
+}
+
+.btn-close::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.5), transparent 46%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .btn-close:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(176, 138, 86, 0.45);
+  box-shadow: 0 16px 34px rgba(176, 138, 86, 0.5);
+}
+
+.btn-close:hover::after {
+  opacity: 1;
+}
+
+.btn-close:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-close .btn-label {
+  position: relative;
+  z-index: 1;
+}
+
+/* 弹窗关闭动效 */
+.modal-overlay.modal-closing {
+  animation: fadeOut 0.32s ease forwards;
+}
+
+.modal-overlay.modal-closing .modal-box {
+  animation: slideOut 0.32s ease forwards;
 }
 
 /* ===== 动效 ===== */
@@ -550,9 +727,42 @@ button:focus-visible {
   to { opacity: 1; transform: none; }
 }
 
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(28px) scale(0.96); }
   to { opacity: 1; transform: none; }
+}
+
+@keyframes slideOut {
+  to { opacity: 0; transform: translateY(20px) scale(0.96); }
+}
+
+/* 暖金光晕脉动 */
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.55; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.12); }
+}
+
+/* 金色粒子上升 */
+@keyframes rise {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  12% { opacity: 0.9; }
+  100% { transform: translateY(-470px) translateX(var(--drift)); opacity: 0; }
+}
+
+/* 白鸽悬浮 */
+@keyframes doveFloat {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-8px) rotate(4deg); }
+}
+
+/* 打字机光标闪烁 */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* ===== 响应式：平板 / 窄屏 ===== */
@@ -675,7 +885,22 @@ button:focus-visible {
   }
 
   .modal-box {
-    padding: 36px 22px 28px;
+    padding: 40px 24px 30px;
+    border-radius: 24px;
+  }
+
+  .modal-dove {
+    font-size: 44px;
+  }
+
+  .modal-title {
+    font-size: 24px;
+    letter-spacing: 5px;
+  }
+
+  .modal-greeting,
+  .modal-clock {
+    letter-spacing: 3px;
   }
 }
 
