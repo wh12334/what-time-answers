@@ -110,24 +110,135 @@
 
     </div>
 
-    <!-- 欢迎弹窗（每次进入首页弹出） -->
+    <!-- 欢迎弹窗（每次进入首页弹出 · 动态渲染） -->
     <div class="modal-overlay" id="welcomeModal">
         <div class="modal-box">
-            <h2>🕊️ 欢迎光临</h2>
-            <p>时间会给你答案。<br>—— 吴横</p>
-            <button class="btn-close" id="closeModal">我知道了</button>
+            <!-- 动态光晕 + 上升金色粒子 -->
+            <div class="modal-glow"></div>
+            <div class="modal-particles" id="modalParticles"></div>
+
+            <!-- 飞舞的白鸽 -->
+            <div class="modal-dove" aria-hidden="true">🕊️</div>
+
+            <!-- 按时段变化的问候语 + 实时时钟 -->
+            <div class="modal-greeting" id="greetingText">欢迎光临</div>
+            <div class="modal-clock" id="liveClock">00:00:00</div>
+
+            <!-- 主题标题（打字机效果） -->
+            <h2 class="modal-title" id="typedTitle"></h2>
+
+            <!-- 分隔装饰 -->
+            <div class="modal-divider"><span>✦</span></div>
+
+            <!-- 引言与落款 -->
+            <p class="modal-quote">时间会给你答案。</p>
+            <p class="modal-sign">—— <span class="modal-author">吴横</span></p>
+
+            <!-- 关键词标签 -->
+            <div class="modal-tags">
+                <span class="modal-tag">成长</span>
+                <span class="modal-tag">坚持</span>
+                <span class="modal-tag">答案</span>
+            </div>
+
+            <!-- 关闭按钮 -->
+            <button class="btn-close" id="closeModal">
+                <span class="btn-label">我知道了</span>
+            </button>
         </div>
     </div>
 
     <script>
-        // 关闭弹窗（点击按钮或点击遮罩）
+        // ===== 欢迎弹窗 · 动态渲染 =====
         const modal = document.getElementById('welcomeModal');
         const closeBtn = document.getElementById('closeModal');
-        const closeModal = () => { modal.style.display = 'none'; };
+        const greetingText = document.getElementById('greetingText');
+        const liveClock = document.getElementById('liveClock');
+        const typedTitle = document.getElementById('typedTitle');
+        const particlesWrap = document.getElementById('modalParticles');
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let clockTimer = null;
+
+        // —— 关闭逻辑（按钮 / 遮罩 / ESC） ——
+        const closeModal = () => {
+            if (modal.classList.contains('modal-closing')) return;
+            modal.classList.add('modal-closing');
+            if (clockTimer) { clearInterval(clockTimer); clockTimer = null; }
+            setTimeout(() => { modal.style.display = 'none'; }, 320);
+        };
         closeBtn.addEventListener('click', closeModal);
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
         });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display !== 'none') closeModal();
+        });
+
+        // —— 关闭按钮磁吸光斑 ——
+        closeBtn.addEventListener('mousemove', (e) => {
+            const r = closeBtn.getBoundingClientRect();
+            closeBtn.style.setProperty('--x', ((e.clientX - r.left) / r.width * 100) + '%');
+            closeBtn.style.setProperty('--y', ((e.clientY - r.top) / r.height * 100) + '%');
+        });
+
+        // —— 按时段生成问候语 ——
+        function getGreeting() {
+            const h = new Date().getHours();
+            if (h < 5)  return '夜深了';
+            if (h < 9)  return '早上好';
+            if (h < 12) return '上午好';
+            if (h < 14) return '中午好';
+            if (h < 18) return '下午好';
+            if (h < 23) return '晚上好';
+            return '夜深了';
+        }
+        greetingText.textContent = getGreeting();
+
+        // —— 实时时钟 ——
+        function tickClock() {
+            const d = new Date();
+            const p = (n) => String(n).padStart(2, '0');
+            liveClock.textContent = `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+        }
+        tickClock();
+        clockTimer = setInterval(tickClock, 1000);
+
+        // —— 打字机标题 ——
+        const fullTitle = '欢迎光临';
+        if (reduceMotion) {
+            typedTitle.textContent = fullTitle;
+            typedTitle.classList.add('typed-done');
+        } else {
+            let ti = 0;
+            (function typeTitle() {
+                typedTitle.textContent = fullTitle.slice(0, ti);
+                ti++;
+                if (ti <= fullTitle.length) {
+                    setTimeout(typeTitle, 160);
+                } else {
+                    typedTitle.classList.add('typed-done');
+                }
+            })();
+        }
+
+        // —— 上方上升的金色粒子 ——
+        if (!reduceMotion) {
+            const PARTICLE_COUNT = 18;
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                const s = document.createElement('span');
+                const size = Math.random() * 6 + 2;              // 2~8px
+                const delay = Math.random() * 6;                  // 0~6s
+                const dur = Math.random() * 6 + 6;                // 6~12s
+                const drift = (Math.random() * 60 - 30);           // -30~30px
+                s.style.left = (Math.random() * 100) + '%';
+                s.style.width = s.style.height = size + 'px';
+                s.style.animationDelay = delay + 's';
+                s.style.animationDuration = dur + 's';
+                s.style.setProperty('--drift', drift + 'px');
+                particlesWrap.appendChild(s);
+            }
+        }
     </script>
 
 </body>
